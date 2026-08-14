@@ -1,0 +1,37 @@
+# Twenty CRM local services — the proven Phase-1 fixture shape
+# (spike-local-services-runtime-2026-08-07: postgres:16 + redis-stack,
+# healthchecks mandatory — `up -d --wait` blocks on them, that IS the
+# readiness signal; fixed host ports are the v1 contract).
+#
+# Matches what `make -C packages/twenty-docker postgres-on-docker` /
+# `redis-on-docker` provide upstream, as one file: user/pass
+# postgres/postgres, DB "default", initdb creating "test".
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: default
+    ports:
+      - "5432:5432"
+    volumes:
+      - twenty_pg:/var/lib/postgresql/data
+      # Resolved relative to this file's directory (.capacity/initdb).
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d default"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  redis:
+    image: redis/redis-stack-server:latest
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+volumes:
+  twenty_pg:

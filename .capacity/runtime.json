@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "apps": [
+    {
+      "id": "front",
+      "name": "Front",
+      "primary": true,
+      "cwd": ".",
+      "command": "npx nx start twenty-front"
+    },
+    {
+      "id": "server",
+      "name": "Server",
+      "primary": false,
+      "cwd": ".",
+      "command": "npx nx start twenty-server"
+    },
+    {
+      "id": "worker",
+      "name": "Worker",
+      "primary": false,
+      "cwd": ".",
+      "command": "npx nx worker twenty-server"
+    }
+  ],
+  "services": [
+    { "id": "db", "composeFile": ".capacity/compose.services.yaml" }
+  ],
+  "setup": [
+    { "id": "db-reset", "command": "npx nx database:reset twenty-server" }
+  ]
+}
