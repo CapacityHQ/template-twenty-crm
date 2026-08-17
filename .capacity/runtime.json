@@ -28,5 +28,6 @@
   ],
   "setup": [
     { "id": "db-reset", "command": "npx nx database:reset twenty-server" }
-  ]
+  ],
+  "envRoots": ["packages/twenty-front", "packages/twenty-server"]
 }
