@@ -27,7 +27,7 @@
     { "id": "db", "composeFile": ".capacity/compose.services.yaml" }
   ],
   "setup": [
-    { "id": "db-reset", "command": "npx nx database:reset twenty-server" }
+    { "id": "db-reset", "command": "npx nx database:reset twenty-server --configuration=no-seed" }
   ],
   "envRoots": ["packages/twenty-front", "packages/twenty-server"]
 }
