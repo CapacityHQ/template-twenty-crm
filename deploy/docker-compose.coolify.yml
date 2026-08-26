@@ -14,8 +14,7 @@ services:
     image: ghcr.io/${CAPACITY_IMAGE_REPO}:${TAG:-latest}
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
-    ports:
-      - "3000:3000"
+    # ports: removed by Capacity — Traefik is the only ingress (custom domain + TLS)
     environment:
       NODE_PORT: 3000
       PG_DATABASE_URL: ${PG_DATABASE_URL}
