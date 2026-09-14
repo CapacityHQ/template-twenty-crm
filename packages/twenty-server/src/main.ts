@@ -76,6 +76,14 @@ const bootstrap = async () => {
 
   app.useLogger(logger);
 
+  // Capacity (rolling-split D11, 2026-09-14): Coolify's rolling update stops
+  // the old container with SIGTERM. Without shutdown hooks Nest ignores it,
+  // Docker SIGKILLs the container 30 s later and the request in flight at
+  // that instant fails; with them the HTTP server closes, in-flight requests
+  // complete and the process exits on its own. queue-worker.ts already
+  // enables them.
+  app.enableShutdownHooks();
+
   app.useBodyParser('json', { limit: settings.storage.maxFileSize });
   app.useBodyParser('urlencoded', {
     limit: settings.storage.maxFileSize,
